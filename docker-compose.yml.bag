@@ -1,0 +1,85 @@
+#version: '3.9'
+
+services:
+#    mysql:
+#        image: mysql:8.0
+#        container_name: laravel_mysql
+# #        restart: always
+#        environment:
+#            MYSQL_ROOT_PASSWORD: root
+#            MYSQL_DATABASE: franken_laravel_db
+# #            MYSQL_USER: root
+# #            MYSQL_PASSWORD: root
+#        ports:
+#            - "3307:3306"
+#        volumes:
+#            - mysql_data:/var/lib/mysql
+#        networks:
+#            - franken_network
+#
+#    phpmyadmin:
+#        image: phpmyadmin/phpmyadmin
+#        container_name: phpmyadmin_laravel
+# #        restart: always
+#        environment:
+#            PMA_HOST: laravel_mysql
+#            PMA_PORT: 3306
+#            MYSQL_ROOT_PASSWORD: root
+#        ports:
+#            - "8081:80"
+#        networks:
+#            - franken_network
+#        depends_on:
+#            - mysql
+
+    pgsql:
+        image: postgres
+        restart: always
+        # set shared memory limit when using docker-compose
+        shm_size: 128mb
+        container_name: laravel_pgsql
+        # or set shared memory limit when deploy via swarm stack
+        #volumes:
+        #  - type: tmpfs
+        #    target: /dev/shm
+        #    tmpfs:
+        #      size: 134217728 # 128*2^20 bytes = 128Mb
+        ports:
+            - 5433:5432
+        environment:
+            POSTGRES_PASSWORD: root
+            POSTGRES_USER: root
+            POSTGRES_DB: franken_laravel_db  # Ganti dengan nama database yang kamu inginka
+        networks:
+            - franken_network
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+        networks:
+            - franken_network
+    laravel_franken:
+        container_name: laravel_franken
+        image: image_laravel_franken
+        build: .
+        ports:
+            -   8001:8000
+        env_file:
+            -   .env
+        networks:
+            - franken_network
+#        depends_on:
+#           - pgsql
+        environment:
+            - APP_ENV=local
+            - APP_DEBUG=true
+            - DB_DATABASE=franken_laravel_db
+            - DB_PASSWORD=root
+            - DB_USERNAME=root
+
+#volumes:
+#    mysql_data:
+networks:
+    franken_network:

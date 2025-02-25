@@ -1,0 +1,29 @@
+# Direktori vendor (biasanya di-build ulang dalam container)
+vendor/
+
+# Direktori node_modules (jika menggunakan Laravel Mix atau Vite)
+node_modules/
+
+# Cache & logs Laravel
+storage/logs/
+storage/framework/cache/
+storage/framework/views/
+storage/framework/sessions/
+
+# Cache Composer
+composer.lock
+composer.phar
+
+# File konfigurasi lingkungan
+.env
+#.env.*
+
+# Direktori yang bisa berubah saat development
+bootstrap/cache/
+
+# File dan direktori sistem
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
